@@ -1,0 +1,6 @@
+/Users/zz-med/caijihui/p/test_laravel/receive_logs.php:30:
+string(22) "Waiting for message..."
+/Users/zz-med/caijihui/p/test_laravel/receive_logs.php:42:
+string(22) "Received: Hello World!"
+/Users/zz-med/caijihui/p/test_laravel/receive_logs.php:42:
+string(22) "Received: Hello World!"
