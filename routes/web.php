@@ -14,6 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::resource('users', 'UsersController');
+
 Route::get('/mail','UserController@mail');
 Route::get('/send','UserController@send');
 Route::get('/login','UserController@login');
