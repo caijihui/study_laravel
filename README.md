@@ -12,7 +12,9 @@
 ### jwt 运用  
 ```bash 
     composer require tymon/jwt-auth:1.0.x-dev 
+    
     php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+   
     php artisan jwt:secret
 ```
 
@@ -32,3 +34,38 @@
 
 使用观察者模式需要在AppServiceProvider-> boot 中添加监听的model 和观察者类
 如：Jobs::observe(JobsObserver::class);
+
+### command 命令
+
+示例，创建个command
+```bash
+    php artisan make:command changeDataCommand
+```
+
+- /app/Console/Commands
+ 
+ 执行命令格式：
+```bash
+    php artisan mg:changedata
+```
+
+###  resource 路由
+
+```bash
+    ## 快捷创建resource控制器
+    php artisan make:controller UsersController --resource
+```
+- 路由中配置的这种情势路由代表下面的意思
+Route::resource('users', 'UsersController');
+
+| HTTP请求 |	URL | 动作 |	路由名称 | 作用 |
+| ---- | :----: | :---: | :---: | :---: |
+| GET |	/users |	UsersController@index |	users.index |显示所有用户列表的页面 |
+| GET |	/users/{user} |	UsersController@show | users.show |	显示用户个人信息的页面 |
+| GET |	/users/create |	UsersController@create | users.create |创建用户的页面 |
+| POST |	/users |	UsersController@store	| users.store | 创建用户 |
+| GET |	/users/{user}/edit | UsersController@edit | users.edit | 编辑用户个人资料的页面 |
+| PATCH |	/users/{user} |	UsersController@update | users.update | 更新用户 |
+| DELETE |	/users/{user} |	UsersController@destroy	| users.destroy | 删除用户 |
+---------------------
+
