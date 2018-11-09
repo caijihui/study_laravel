@@ -21,3 +21,4 @@ Route::get('/send','UserController@send');
 Route::get('/login','UserController@login');
 Route::get('/event','UserController@event');
 Route::get('/age','UserController@age');
+Route::get('/redis','UserController@studyRedis');

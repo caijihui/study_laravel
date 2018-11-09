@@ -16,11 +16,51 @@ use App\Events\UserLogin;
 use App\Models\Jobs;
 use Illuminate\Support\Facades\Cache as Caches;
 use Carbon\Carbon;
-
 class UserController extends Controller
 {
 
 
+    /**
+     *  redis 设置k v
+     *   json  encode  decode
+     */
+    public function studyRedis()
+    {
+        $a = Redis::set('abc','11111');
+        $b = Redis::get('abc');
+        $key = 'user';
+        //判断指定键是否存在
+        if(Redis::exists($key)){
+            //根据键名获取键值
+            //dd(Redis::get($key));
+        }else{
+            Redis::set($key,'{"a":"d"}');
+        }
+        /**
+         *   json_decode   /    json_encode
+         */
+        $kv = Redis::get($key);
+        $arr1 = json_decode($kv);//对象
+        $arr2 = json_decode($kv,true);//数组
+
+
+        var_dump($arr1);
+        var_dump($arr2);
+
+        echo "<br>";
+
+        $arr = [
+            'id'=>7,
+            'name'=>'正确',
+            'age'=>'18'
+        ];
+        $j =  json_encode($arr);//转成  \u 开头的，需要
+        $j1 =  json_encode($arr,JSON_UNESCAPED_UNICODE);//中文不转义
+        var_dump($j);
+        var_dump($j1);
+        echo "<br>";
+
+    }
     /**
      *  计算年龄
      * @param Request $request
