@@ -19,7 +19,11 @@ use Carbon\Carbon;
 class UserController extends Controller
 {
 
-
+    public function test()
+    {
+        echo "test - ok";
+        return 'ok';
+    }
     /**
      *  redis 设置k v
      *   json  encode  decode
