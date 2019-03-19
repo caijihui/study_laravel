@@ -8,6 +8,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendEmail;
+use App\Models\RedisConcurrent;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Queue\Queue;
@@ -16,9 +17,18 @@ use App\Events\UserLogin;
 use App\Models\Jobs;
 use Illuminate\Support\Facades\Cache as Caches;
 use Carbon\Carbon;
+use App\Models\Redis_lock;
+use Illuminate\Support\Facades\Input;
 class UserController extends Controller
 {
 
+    public function redis()
+    {
+        $redis = new Redis_lock();
+        $a =  $redis->get_millisecond();
+        echo $a;
+
+    }
     public function test()
     {
         echo "test - ok";
@@ -30,6 +40,20 @@ class UserController extends Controller
      */
     public function studyRedis()
     {
+        $data = Input::all();
+        $userId = $data['user_id'] ?? 1515;
+        $num = $data['num'] ?? 1;
+        $about = 2;
+        $redisClient = RedisConcurrent::getInstance();
+        ## 进行订单操作
+        $a = $redisClient->order($userId,$about,$num);
+        if ($a){
+            //执行sql操作
+            // 失败后释放库存
+            if (false) {
+               $redisClient->_out($num, $userId, $about);
+            }
+        }
         $a = Redis::set('abc','11111');
         $b = Redis::get('abc');
         $key = 'user';
@@ -50,20 +74,6 @@ class UserController extends Controller
 
         var_dump($arr1);
         var_dump($arr2);
-
-        echo "<br>";
-
-        $arr = [
-            'id'=>7,
-            'name'=>'正确',
-            'age'=>'18'
-        ];
-        $j =  json_encode($arr);//转成  \u 开头的，需要
-        $j1 =  json_encode($arr,JSON_UNESCAPED_UNICODE);//中文不转义
-        var_dump($j);
-        var_dump($j1);
-        echo "<br>";
-
     }
     /**
      *  计算年龄
@@ -72,7 +82,6 @@ class UserController extends Controller
      */
     public function age(Request $request){
         $bday = $request->input('bday');
-
         $bday = $bday ?? '2012-09-08';
         list($year, $month, $day) = explode('-', $bday);
         $birthday = Carbon::createFromDate($year, $month, $day);

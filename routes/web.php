@@ -19,6 +19,7 @@ Route::resource('users', 'UsersController');
 Route::any('/wx','wxController@index');
 
 
+Route::get('/redis/test','UserController@redis');
 Route::get('/mail','UserController@mail');
 Route::get('/send','UserController@send');
 Route::get('/login','UserController@login');
