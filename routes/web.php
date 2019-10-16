@@ -18,6 +18,8 @@ Route::resource('users', 'UsersController');
 
 Route::any('/wx','wxController@index');
 
+Route::get('/sort','UserController@sort');
+
 
 Route::get('/redis/test','UserController@redis');
 Route::get('/mail','UserController@mail');
@@ -26,3 +28,9 @@ Route::get('/login','UserController@login');
 Route::get('/event','UserController@event');
 Route::get('/age','UserController@age');
 Route::get('/redis','UserController@studyRedis');
+Route::get('/search','UserController@search');
+Route::get('/show','UserController@show');
+
+
+Route::get('/test/a','TestController@a');
+Route::get('/test/b','TestController@b');

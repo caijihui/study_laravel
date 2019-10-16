@@ -7,13 +7,23 @@
     "require": {
         "php": ">=7.0.0",
         "chrisboulton/php-resque": "1.2.x",
+        "dingo/api": "^2.2",
+        "elasticsearch/elasticsearch": "^5.0",
         "fideloper/proxy": "~3.3",
+        "garveen/laravoole": "^0.5.1",
+        "guzzlehttp/guzzle": "~6.0",
         "laravel/framework": "5.5.*",
+        "laravel/scout": "^5.0",
         "laravel/tinker": "~1.0",
+        "monolog/monolog": "^1.24",
+        "nmred/kafka-php": "v0.2.0.8",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^0.11.0",
-        "tymon/jwt-auth": "1.0.x-dev"
+        "swooletw/laravel-swoole": "v2.6.5.4",
+        "tamayo/laravel-scout-elastic": "^4.0",
+        "tymon/jwt-auth": "1.0.x-dev",
+        "workerman/workerman": "^3.5"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
@@ -61,5 +71,11 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\JobsObserver;
 use App\Models\Jobs;
+use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Jobs::observe(JobsObserver::class);
+        \DB::listen(function($sql) {
+//            Log::info(json_encode($sql, JSON_PRETTY_PRINT));
+        });
     }
 
     /**
@@ -27,5 +31,12 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+//        \DB::listen(
+//            function ($query) {
+//                Log::debug($query->sql);
+//                Log::debug(json_encode($query->bindings, JSON_PRETTY_PRINT));
+//                Log::debug($query->time);
+//            }
+//        );
     }
 }

@@ -35,6 +35,14 @@
 使用观察者模式需要在AppServiceProvider-> boot 中添加监听的model 和观察者类
 如：Jobs::observe(JobsObserver::class);
 
+有遇到没有触发事件的：
+目前根据论坛查询和个人实践 
+- save() , 
+- find ($id)->update 
+- first () ->update () 
+是可以触发观察者事件 updated() 的。
+
+
 ### command 命令
 
 示例，创建个command

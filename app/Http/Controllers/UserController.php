@@ -8,10 +8,12 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendEmail;
+use App\Models\Article;
 use App\Models\RedisConcurrent;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Queue\Queue;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use App\Events\UserLogin;
 use App\Models\Jobs;
@@ -19,8 +21,92 @@ use Illuminate\Support\Facades\Cache as Caches;
 use Carbon\Carbon;
 use App\Models\Redis_lock;
 use Illuminate\Support\Facades\Input;
+use App\Models\ActivityNews;
+use Ramsey\Uuid\Uuid;
+
 class UserController extends Controller
 {
+
+    public function sort()
+    {
+        $arr = [8,3,5,12,0,3,5,32,1,5,6];
+        return $this->quick($arr);
+    }
+    public function quick($arr){
+        if (count($arr) <= 1){
+            return $arr;
+        }
+        $mid = $arr[0];
+        $left = [];
+        $right = [];
+        foreach ($arr as $v){
+            if ($v > $mid){
+                $left[] = $v;
+            }
+            if ($v < $mid){
+                $right[] = $v;
+            }
+        }
+        $left = $this->quick($left);
+        $right = $this->quick($right);
+
+        return array_merge($left,[$arr[0]],$right);
+    }
+
+
+    /**
+     *  协程 swoole
+     */
+    public function xc()
+    {
+        $start_time = time();
+        for ($i = 0; $i <= 500; $i++) {
+            go(function ()use($i,$start_time){
+                $cli = new Swoole\Coroutine\Http\Client('www.baidu.com', 443,true);
+                $cli->setHeaders([
+                    'Host' => "www.baidu.com",
+                    "User-Agent" => 'Chrome/49.0.2587.3',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml',
+                    'Accept-Encoding' => 'gzip',
+                ]);
+                $cli->set([ 'timeout' => 0.11]);
+                $cli->get('/');
+                $cli->close();
+                echo  "协程{$i}已完成,耗时".(time()-$start_time).PHP_EOL;
+            });
+        }
+        $start_time = time();
+        for ($i = 0; $i <= 500; $i++) {
+            $url     = 'https://www.baidu.com/';
+            $content = file_get_contents($url);
+            echo "普通{$i}已完成\n";
+        }
+        echo "非携程完成时间:" . (time() - $start_time);
+
+    }
+
+    /**
+     *  es 搜索 尝试
+     */
+    public function search()
+    {
+        $query = Input::get('query');
+//        $res =  ActivityNews::where('id','>',1)->get()->toArray();
+        $res = ActivityNews::search($query)->get();
+
+        $a = 1;
+        return response(['code'=>0,'message'=>'success','data'=>$res]);
+    }
+
+
+    public function show(){
+
+        $uuid = Uuid::uuid1()->getHex();
+        $res =  Article::create(['uuid'=>$uuid,'title'=>'v1','content'=>'v1 content']);
+
+        return response(['id'=>$res->uuid ?? '']);
+
+    }
 
     public function redis()
     {
@@ -82,7 +168,7 @@ class UserController extends Controller
      */
     public function age(Request $request){
         $bday = $request->input('bday');
-        $bday = $bday ?? '2012-09-08';
+        $bday = $bday ?? '2010-09-09';
         list($year, $month, $day) = explode('-', $bday);
         $birthday = Carbon::createFromDate($year, $month, $day);
         $age = Carbon::now()->diffInYears($birthday);

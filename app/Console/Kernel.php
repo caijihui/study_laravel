@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Console;
-
+use App\Console\Commands\ESInit;
+use App\Console\Commands\life;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,6 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        ESInit::class,
+        life::class,
     ];
 
     /**
@@ -26,6 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('heart:life')->everyMinute();
     }
 
     /**
